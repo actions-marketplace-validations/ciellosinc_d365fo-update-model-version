@@ -1,2 +1,2 @@
-# D365FO_UpdateModelVersion
-Update Model Version action. 
+# D365FO UpdateModelVersion action
+This action is using to update version in the AX Model descriptor file.
