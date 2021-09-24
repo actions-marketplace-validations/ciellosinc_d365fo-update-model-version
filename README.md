@@ -1,2 +1,2 @@
 # D365FO UpdateModelVersion action
-This action is using to update version in the AX Model descriptor file.
+Action to update X++ model versions for Dynamics 365 for Finance and Operations.
