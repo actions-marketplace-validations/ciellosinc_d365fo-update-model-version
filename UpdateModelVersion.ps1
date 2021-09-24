@@ -767,6 +767,8 @@ function Get-FullNormalizedPath {
 # End - Private functions.
 ################################################################################
 
+
+
 if ($xppDescriptorSearch.Contains("`n"))
 {
     [string[]]$xppDescriptorSearch = $xppDescriptorSearch -split "`n"
@@ -782,6 +784,9 @@ else
 {
     throw "Version Number '$versionNumber' is not of format #.#.#.#"
 }
+
+Write-Verbose "Loading compiled helper $PSScriptRoot\VstsTaskSdk.dll."
+Add-Type -LiteralPath $PSScriptRoot\VstsTaskSdk.dll
 
 # Discover packages
 $BuildModuleDirectories = @(Get-ChildItem -Path $BuildMetadataDir -Directory)
