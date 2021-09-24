@@ -768,7 +768,6 @@ function Get-FullNormalizedPath {
 ################################################################################
 
 
-
 if ($xppDescriptorSearch.Contains("`n"))
 {
     [string[]]$xppDescriptorSearch = $xppDescriptorSearch -split "`n"
@@ -787,6 +786,29 @@ else
 
 Write-Verbose "Loading compiled helper $PSScriptRoot\VstsTaskSdk.dll."
 Add-Type -LiteralPath $PSScriptRoot\VstsTaskSdk.dll
+
+
+switch ( $xppLayer )
+{
+    "SYS" { $xppLayer = 0 }
+    "SYP" { $xppLayer = 1 }
+    "GLS" { $xppLayer = 2 }
+    "GLP" { $xppLayer = 3 }
+    "FPK" { $xppLayer = 4 }
+    "FPP" { $xppLayer = 5 }
+    "SLN" { $xppLayer = 6 }
+    "SLP" { $xppLayer = 7 }
+    "ISV" { $xppLayer = 8 }
+    "ISP" { $xppLayer = 9 }
+    "VAR" { $xppLayer = 10 }
+    "VAP" { $xppLayer = 11 }
+    "CUS" { $xppLayer = 12 }
+    "CUP" { $xppLayer = 13 }
+    "USR" { $xppLayer = 14 }
+    "USP" { $xppLayer = 15 }
+}
+
+
 
 # Discover packages
 $BuildModuleDirectories = @(Get-ChildItem -Path $BuildMetadataDir -Directory)
