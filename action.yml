@@ -27,6 +27,5 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run: echo Hello ${{ inputs.who-to-greet }}.
     - run: ${{ github.action_path }}/UpdateModelVersion.ps1 -xppSourcePath ${{ inputs.xppSourcePath }} -xppDescriptorSearch ${{ inputs.xppDescriptorSearch }}  -xppLayer ${{ inputs.xppLayer }} -versionNumber ${{ inputs.versionNumber }}
       shell: powershell
