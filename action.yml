@@ -1,5 +1,5 @@
-name: 'D365 FO Update Model Version'
-description: 'Greet someone'
+name: 'D365FO Update Model Version'
+description: 'This action is using to update version in the AX Model descriptor file.'
 branding:
   icon: 'award'  
   color: 'blue'
@@ -21,4 +21,4 @@ runs:
       run: echo "::set-output name=random-id::$(echo $RANDOM)"
       shell: bash
     - run: ${{ github.action_path }}/goodbye.ps1
-      shell: bash
+      shell: powershell
