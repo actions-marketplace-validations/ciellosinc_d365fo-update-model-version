@@ -1,4 +1,4 @@
-name: 'Hello World'
+name: 'D365 FO Update Model Version'
 description: 'Greet someone'
 inputs:
   who-to-greet:  # id of input
