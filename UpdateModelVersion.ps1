@@ -4,96 +4,9 @@
         [string]$xppSourcePath,
         [Parameter()]
         [string]$xppDescriptorSearch,
-        $FindOptions,
         $xppLayer,
         $versionNumber
         )
-
-
-#$xppSourcePath = "C:\_bld\PackagesLocalDirectory"
-#$xppDescriptorSearch = "**\Descriptor\*.xml"
-#$xppLayer = "VAR"
-#$versionNumber = "2021.09.22.2"
-
-if ($xppDescriptorSearch.Contains("`n"))
-{
-    [string[]]$xppDescriptorSearch = $xppDescriptorSearch -split "`n"
-}
-
-Test-Path -LiteralPath $xppSourcePath -PathType Container
-    
-if ($versionNumber -match "^\d+\.\d+\.\d+\.\d+$")
-{
-    $versions = $versionNumber.Split('.')
-}
-else
-{
-    throw "Version Number '$versionNumber' is not of format #.#.#.#"
-}
-
-# Discover packages
-$BuildModuleDirectories = @(Get-ChildItem -Path $BuildMetadataDir -Directory)
-foreach ($BuildModuleDirectory in $BuildModuleDirectories)
-{
-    $potentialDescriptors = Find-Match -DefaultRoot $xppSourcePath -Pattern $xppDescriptorSearch | Where-Object { (Test-Path -LiteralPath $_ -PathType Leaf) }
-    if ($potentialDescriptors.Length -gt 0)
-    {
-        Write-Host "Found $($potentialDescriptors.Length) potential descriptors"
-
-        foreach ($descriptorFile in $potentialDescriptors)
-        {
-            try
-            {
-                [xml]$xml = Get-Content $descriptorFile -Encoding UTF8
-
-                $modelInfo = $xml.SelectNodes("/AxModelInfo")
-                if ($modelInfo.Count -eq 1)
-                {
-                    $layer = $xml.SelectNodes("/AxModelInfo/Layer")[0]
-                    $layerid = $layer.InnerText
-                    $layerid = [int]$layerid
-
-                    $modelName = ($xml.SelectNodes("/AxModelInfo/Name")).InnerText
-                        
-                    # If this model's layer is equal or above lowest layer specified
-                    if ($layerid -ge $xppLayer)
-                    {
-                        $version = $xml.SelectNodes("/AxModelInfo/VersionMajor")[0]
-                        $version.InnerText = $versions[0]
-
-                        $version = $xml.SelectNodes("/AxModelInfo/VersionMinor")[0]
-                        $version.InnerText = $versions[1]
-
-                        $version = $xml.SelectNodes("/AxModelInfo/VersionBuild")[0]
-                        $version.InnerText = $versions[2]
-
-                        $version = $xml.SelectNodes("/AxModelInfo/VersionRevision")[0]
-                        $version.InnerText = $versions[3]
-
-                        $xml.Save($descriptorFile)
-
-                        Write-Host " - Updated model $modelName version to $versionNumber in $descriptorFile"
-                    }
-                    else
-                    {
-                        Write-Host " - Skipped $modelName because it is in a lower layer in $descriptorFile"
-                    }
-                }
-                else
-                {
-                    Write-Host "##vso[task.logissue type=error] - File '$descriptorFile' is not a valid descriptor file"
-                }
-            }
-            catch
-            {
-                Write-Host "##vso[task.logissue type=error] - File '$descriptorFile' is not a valid descriptor file (exception: $($_.Exception.Message))"
-            }
-        }
-    }
-}
-
-
-
 
 
 
@@ -338,3 +251,85 @@ function New-MatchOptions {
         NoNull = $NoNull.IsPresent
     }
 }
+#$xppSourcePath = "C:\_bld\PackagesLocalDirectory"
+#$xppDescriptorSearch = "**\Descriptor\*.xml"
+#$xppLayer = "VAR"
+#$versionNumber = "2021.09.22.2"
+
+if ($xppDescriptorSearch.Contains("`n"))
+{
+    [string[]]$xppDescriptorSearch = $xppDescriptorSearch -split "`n"
+}
+
+Test-Path -LiteralPath $xppSourcePath -PathType Container
+    
+if ($versionNumber -match "^\d+\.\d+\.\d+\.\d+$")
+{
+    $versions = $versionNumber.Split('.')
+}
+else
+{
+    throw "Version Number '$versionNumber' is not of format #.#.#.#"
+}
+
+# Discover packages
+$BuildModuleDirectories = @(Get-ChildItem -Path $BuildMetadataDir -Directory)
+foreach ($BuildModuleDirectory in $BuildModuleDirectories)
+{
+    $potentialDescriptors = Find-Match -DefaultRoot $xppSourcePath -Pattern $xppDescriptorSearch | Where-Object { (Test-Path -LiteralPath $_ -PathType Leaf) }
+    if ($potentialDescriptors.Length -gt 0)
+    {
+        Write-Host "Found $($potentialDescriptors.Length) potential descriptors"
+
+        foreach ($descriptorFile in $potentialDescriptors)
+        {
+            try
+            {
+                [xml]$xml = Get-Content $descriptorFile -Encoding UTF8
+
+                $modelInfo = $xml.SelectNodes("/AxModelInfo")
+                if ($modelInfo.Count -eq 1)
+                {
+                    $layer = $xml.SelectNodes("/AxModelInfo/Layer")[0]
+                    $layerid = $layer.InnerText
+                    $layerid = [int]$layerid
+
+                    $modelName = ($xml.SelectNodes("/AxModelInfo/Name")).InnerText
+                        
+                    # If this model's layer is equal or above lowest layer specified
+                    if ($layerid -ge $xppLayer)
+                    {
+                        $version = $xml.SelectNodes("/AxModelInfo/VersionMajor")[0]
+                        $version.InnerText = $versions[0]
+
+                        $version = $xml.SelectNodes("/AxModelInfo/VersionMinor")[0]
+                        $version.InnerText = $versions[1]
+
+                        $version = $xml.SelectNodes("/AxModelInfo/VersionBuild")[0]
+                        $version.InnerText = $versions[2]
+
+                        $version = $xml.SelectNodes("/AxModelInfo/VersionRevision")[0]
+                        $version.InnerText = $versions[3]
+
+                        $xml.Save($descriptorFile)
+
+                        Write-Host " - Updated model $modelName version to $versionNumber in $descriptorFile"
+                    }
+                    else
+                    {
+                        Write-Host " - Skipped $modelName because it is in a lower layer in $descriptorFile"
+                    }
+                }
+                else
+                {
+                    Write-Host "##vso[task.logissue type=error] - File '$descriptorFile' is not a valid descriptor file"
+                }
+            }
+            catch
+            {
+                Write-Host "##vso[task.logissue type=error] - File '$descriptorFile' is not a valid descriptor file (exception: $($_.Exception.Message))"
+            }
+        }
+    }
+}
+
