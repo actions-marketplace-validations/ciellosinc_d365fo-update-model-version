@@ -17,8 +17,5 @@ runs:
   steps:
     - run: echo Hello ${{ inputs.who-to-greet }}.
       shell: bash
-    - id: random-number-generator
-      run: echo "::set-output name=random-id::$(echo $RANDOM)"
-      shell: bash
     - run: ${{ github.action_path }}/UpdateModelVersion.ps1 -xppSourcePath "C:\_bld\PackagesLocalDirectory" -xppDescriptorSearch "**\Descriptor\*.xml" -xppLayer "VAR" -versionNumber "2.2.30.2"
       shell: powershell
