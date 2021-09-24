@@ -10,6 +10,10 @@
 
 
 
+################################################################################
+# Start - Private functions.
+################################################################################
+
 function Find-Match {
     [CmdletBinding()]
     param(
@@ -475,6 +479,46 @@ function Trace-FindOptions {
     Write-Verbose "FindOptions.FollowSymbolicLinks: '$($FindOptions.FollowSymbolicLinks)'"
 }
 
+function Copy-MatchOptions {
+    [CmdletBinding()]
+    param($Options)
+
+    return New-Object psobject -Property @{
+        Dot = $Options.Dot -eq $true
+        FlipNegate = $Options.FlipNegate -eq $true
+        MatchBase = $Options.MatchBase -eq $true
+        NoBrace = $Options.NoBrace -eq $true
+        NoCase = $Options.NoCase -eq $true
+        NoComment = $Options.NoComment -eq $true
+        NoExt = $Options.NoExt -eq $true
+        NoGlobStar = $Options.NoGlobStar -eq $true
+        NoNegate = $Options.NoNegate -eq $true
+        NoNull = $Options.NoNull -eq $true
+    }
+}
+
+function ConvertTo-MinimatchOptions {
+    [CmdletBinding()]
+    param($Options)
+
+    $opt = New-Object Minimatch.Options
+    $opt.AllowWindowsPaths = $true
+    $opt.Dot = $Options.Dot -eq $true
+    $opt.FlipNegate = $Options.FlipNegate -eq $true
+    $opt.MatchBase = $Options.MatchBase -eq $true
+    $opt.NoBrace = $Options.NoBrace -eq $true
+    $opt.NoCase = $Options.NoCase -eq $true
+    $opt.NoComment = $Options.NoComment -eq $true
+    $opt.NoExt = $Options.NoExt -eq $true
+    $opt.NoGlobStar = $Options.NoGlobStar -eq $true
+    $opt.NoNegate = $Options.NoNegate -eq $true
+    $opt.NoNull = $Options.NoNull -eq $true
+    return $opt
+}
+
+################################################################################
+# End - Private functions.
+################################################################################
 
 if ($xppDescriptorSearch.Contains("`n"))
 {
