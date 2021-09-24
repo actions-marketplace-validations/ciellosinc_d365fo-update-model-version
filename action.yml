@@ -1,5 +1,6 @@
 name: 'D365 FO Update Model Version'
 description: 'Greet someone'
+icon: blue
 inputs:
   who-to-greet:  # id of input
     description: 'Who to greet'
