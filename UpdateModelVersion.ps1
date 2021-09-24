@@ -20,7 +20,6 @@ function Find-Match {
         $FindOptions,
         $MatchOptions)
 
-Install-Package Minimatch
     $originalErrorActionPreference = $ErrorActionPreference
     try {
         $ErrorActionPreference = 'Stop'
