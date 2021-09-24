@@ -1,6 +1,8 @@
 name: 'D365 FO Update Model Version'
 description: 'Greet someone'
-icon: blue
+branding:
+  icon: 'award'  
+  color: 'blue'
 inputs:
   who-to-greet:  # id of input
     description: 'Who to greet'
