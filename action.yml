@@ -1,4 +1,4 @@
-name: 'D365FO update model version'
+name: 'D365 FO update model version'
 description: 'Action to update X++ model versions for Dynamics 365 for Finance and Operations.'
 branding:
   icon: 'award'  
